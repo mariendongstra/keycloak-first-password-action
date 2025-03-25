@@ -6,7 +6,7 @@ import org.keycloak.authentication.AuthenticationFlowError;
 import org.keycloak.models.*;
 import org.keycloak.credential.CredentialInput;
 import org.keycloak.credential.CredentialModel;
-import org.keycloak.credential.UserCredentialManager;
+import org.keycloak.credential.CredentialManager;
 import org.keycloak.credential.UserCredentialStoreManager;
 import org.keycloak.services.validation.Validation;
 import jakarta.ws.rs.core.MultivaluedMap;
@@ -45,8 +45,8 @@ public class CustomPasswordAuthenticator implements Authenticator {
         }
 
         UserModel user = context.getUser();
-        UserCredentialManager credentialManager = session.getProvider(UserCredentialManager.class);
-        credentialManager.updateCredential(context.getRealm(), user, UserCredentialModel.password(password, false));
+        CredentialManager credentialManager = session.getProvider(CredentialManager.class);
+        credentialManager.updateCredential(realm, user, UserCredentialModel.password(password, false));
 
         context.success();
     }
