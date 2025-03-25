@@ -3,12 +3,12 @@ package com.example.keycloak.auth;
 import org.keycloak.authentication.Authenticator;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.AuthenticationFlowError;
-import org.keycloak.credential.CredentialInput;
-import org.keycloak.credential.CredentialInputValidator;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserCredentialModel;
 import org.keycloak.models.UserModel;
+import org.keycloak.credential.UserCredentialManager;
+
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
 
@@ -35,7 +35,8 @@ public class CustomResetPasswordAuthenticator implements Authenticator {
         }
 
         UserModel user = context.getUser();
-        context.getSession().userCredentialManager().updateCredential(
+        UserCredentialManager credentials = context.getSession().userCredentialManager();
+        credentials.updateCredential(
             context.getRealm(), user, UserCredentialModel.password(password, false)
         );
 

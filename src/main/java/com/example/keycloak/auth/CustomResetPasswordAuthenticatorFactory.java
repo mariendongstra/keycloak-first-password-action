@@ -2,13 +2,14 @@ package com.example.keycloak.auth;
 
 import org.keycloak.authentication.Authenticator;
 import org.keycloak.authentication.AuthenticatorFactory;
+import org.keycloak.authentication.ConfigurableAuthenticatorFactory;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.provider.ProviderConfigProperty;
 
 import java.util.List;
 
-public class CustomResetPasswordAuthenticatorFactory implements AuthenticatorFactory {
+public class CustomResetPasswordAuthenticatorFactory implements ConfigurableAuthenticatorFactory {
 
     public static final String PROVIDER_ID = "custom-reset-password";
 
@@ -25,7 +26,6 @@ public class CustomResetPasswordAuthenticatorFactory implements AuthenticatorFac
     @Override
     public String getHelpText() {
         return "A custom reset password step using a custom FTL template.";
-
     }
 
     @Override
@@ -38,7 +38,14 @@ public class CustomResetPasswordAuthenticatorFactory implements AuthenticatorFac
     @Override public void close() {}
     @Override public boolean isConfigurable() { return false; }
     @Override public boolean isUserSetupAllowed() { return false; }
-    @Override public Requirement[] getRequirementChoices() {
+
+    @Override
+    public String getReferenceCategory() {
+        return "custom-reset-password";
+    }
+
+    @Override
+    public Requirement[] getRequirementChoices() {
         return new Requirement[] { Requirement.REQUIRED };
     }
 
