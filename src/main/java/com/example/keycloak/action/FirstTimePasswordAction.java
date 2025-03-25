@@ -6,7 +6,9 @@ import jakarta.ws.rs.core.Response;
 import org.keycloak.authentication.RequiredActionContext;
 import org.keycloak.authentication.RequiredActionProvider;
 import org.keycloak.models.UserModel;
-import org.keycloak.credential.UserCredentialModel;
+
+import org.keycloak.credential.CredentialModel;
+import org.keycloak.credential.PasswordCredentialModel;
 
 public class FirstTimePasswordAction implements RequiredActionProvider {
 
@@ -35,8 +37,9 @@ public class FirstTimePasswordAction implements RequiredActionProvider {
         }
 
         UserModel user = context.getUser();
+        CredentialModel credential = PasswordCredentialModel.createFromValues(password);
         context.getSession().userCredentialManager().updateCredential(
-            context.getRealm(), user, UserCredentialModel.password(password, false)
+            context.getRealm(), user, credential
         );
         context.success();
     }
