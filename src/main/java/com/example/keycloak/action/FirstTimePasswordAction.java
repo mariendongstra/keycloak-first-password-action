@@ -5,10 +5,10 @@ import jakarta.ws.rs.core.Response;
 
 import org.keycloak.authentication.RequiredActionContext;
 import org.keycloak.authentication.RequiredActionProvider;
+import org.keycloak.credential.CredentialModel;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.models.credential.PasswordCredentialModel;
-import org.keycloak.models.credential.CredentialModel;
 import org.keycloak.models.utils.KeycloakModelUtils;
 
 public class FirstTimePasswordAction implements RequiredActionProvider {
