@@ -3,12 +3,12 @@ package com.example.keycloak.auth;
 import org.keycloak.authentication.Authenticator;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.AuthenticationFlowError;
-import org.keycloak.models.*;
-import org.keycloak.credential.CredentialInput;
-import org.keycloak.credential.CredentialModel;
-import org.keycloak.credential.CredentialManager;
-import org.keycloak.credential.UserCredentialStoreManager;
+import org.keycloak.models.UserModel;
+import org.keycloak.models.RealmModel;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.credential.PasswordCredentialModel;
 import org.keycloak.services.validation.Validation;
+
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
 
@@ -22,11 +22,14 @@ public class CustomPasswordAuthenticator implements Authenticator {
             return;
         }
 
-        boolean isFirstLogin = isFirstLogin(user, context.getSession(), context.getRealm());
+        boolean hasPassword = user.credentialManager().isConfiguredFor("password");
+
+        String template = hasPassword ? "reset-password.ftl" : "first-password.ftl";
 
         Response challenge = context.form()
-            .setAttribute("isFirstLogin", isFirstLogin)
-            .createForm(isFirstLogin ? "first-password.ftl" : "reset-password.ftl");
+            .setAttribute("isFirstLogin", !hasPassword)
+            .createForm(template);
+
         context.challenge(challenge);
     }
 
@@ -45,15 +48,8 @@ public class CustomPasswordAuthenticator implements Authenticator {
         }
 
         UserModel user = context.getUser();
-        CredentialManager credentialManager = session.getProvider(CredentialManager.class);
-        credentialManager.updateCredential(realm, user, UserCredentialModel.password(password, false));
-
+        user.credentialManager().updateCredential(PasswordCredentialModel.createFromValue(password));
         context.success();
-    }
-
-    private boolean isFirstLogin(UserModel user, KeycloakSession session, RealmModel realm) {
-        UserCredentialManager credentialManager = session.userCredentialManager();
-        return !credentialManager.isConfiguredFor(realm, user, CredentialModel.PASSWORD);
     }
 
     @Override
@@ -68,11 +64,11 @@ public class CustomPasswordAuthenticator implements Authenticator {
 
     @Override
     public void setRequiredActions(KeycloakSession session, RealmModel realm, UserModel user) {
-        // No required actions
+        // Nothing here
     }
 
     @Override
     public void close() {
-        // No resources to close
+        // Nothing to clean up
     }
 }
