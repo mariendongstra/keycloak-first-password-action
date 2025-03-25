@@ -43,9 +43,10 @@ public class FirstTimePasswordAction implements RequiredActionProvider {
 
         UserModel user = context.getUser();
         RealmModel realm = context.getRealm();
+        CredentialManager credentialManager = context.getSession().getProvider(CredentialManager.class);
 
-        PasswordCredentialModel passwordCredential = PasswordCredentialModel.createFromPlainText(password);
-        context.getSession().userCredentialManager().updateCredential(realm, user, passwordCredential);
+        UserCredentialModel cred = UserCredentialModel.password(password, false);
+        credentialManager.updateCredential(realm, user, cred);
 
         context.success();
     }

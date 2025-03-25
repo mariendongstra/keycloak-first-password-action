@@ -33,7 +33,4 @@ public class FirstTimePasswordActionFactory implements RequiredActionFactory {
     @Override public void postInit(KeycloakSessionFactory factory) {}
     @Override public void close() {}
     @Override public boolean isOneTimeAction() { return true; }
-    @Override public List<ProviderConfigProperty> getConfigProperties() {
-        return Collections.emptyList();
-    }
 }
