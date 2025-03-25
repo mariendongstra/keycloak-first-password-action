@@ -5,14 +5,17 @@ import jakarta.ws.rs.core.Response;
 
 import org.keycloak.authentication.RequiredActionContext;
 import org.keycloak.authentication.RequiredActionProvider;
+import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
-import org.keycloak.models.utils.CredentialHelper;
+import org.keycloak.models.credential.PasswordCredentialModel;
+import org.keycloak.models.credential.CredentialModel;
+import org.keycloak.models.utils.KeycloakModelUtils;
 
 public class FirstTimePasswordAction implements RequiredActionProvider {
 
     @Override
     public void evaluateTriggers(RequiredActionContext context) {
-        // Nothing to do here
+        // No automatic trigger
     }
 
     @Override
@@ -39,15 +42,14 @@ public class FirstTimePasswordAction implements RequiredActionProvider {
         }
 
         UserModel user = context.getUser();
+        RealmModel realm = context.getRealm();
 
-        // ✅ Keycloak 26+ password update method
-        CredentialHelper.updatePassword(context.getSession(), context.getRealm(), user, password);
+        PasswordCredentialModel passwordCredential = PasswordCredentialModel.createFromPlainText(password);
+        context.getSession().userCredentialManager().updateCredential(realm, user, passwordCredential);
 
         context.success();
     }
 
     @Override
-    public void close() {
-        // No cleanup needed
-    }
+    public void close() {}
 }
