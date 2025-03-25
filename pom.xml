@@ -25,6 +25,12 @@
             <version>26.1.4</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-model-utils</artifactId>
+            <version>26.1.4</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <finalName>first-password-action</finalName>

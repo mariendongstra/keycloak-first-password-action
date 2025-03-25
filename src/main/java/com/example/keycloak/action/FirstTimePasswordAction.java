@@ -6,20 +6,21 @@ import jakarta.ws.rs.core.Response;
 import org.keycloak.authentication.RequiredActionContext;
 import org.keycloak.authentication.RequiredActionProvider;
 import org.keycloak.models.UserModel;
-
-import org.keycloak.credential.CredentialModel;
-import org.keycloak.credential.PasswordCredentialModel;
+import org.keycloak.models.utils.CredentialHelper;
 
 public class FirstTimePasswordAction implements RequiredActionProvider {
 
     @Override
-    public void evaluateTriggers(RequiredActionContext context) {}
+    public void evaluateTriggers(RequiredActionContext context) {
+        // Nothing to do here
+    }
 
     @Override
     public void requiredActionChallenge(RequiredActionContext context) {
         Response challenge = context.form()
             .setAttribute("isFirstTime", true)
             .createForm("first-password.ftl");
+
         context.challenge(challenge);
     }
 
@@ -32,18 +33,21 @@ public class FirstTimePasswordAction implements RequiredActionProvider {
             Response challenge = context.form()
                 .setError("missingPassword")
                 .createForm("first-password.ftl");
+
             context.challenge(challenge);
             return;
         }
 
         UserModel user = context.getUser();
-        CredentialModel credential = PasswordCredentialModel.createFromValues(password);
-        context.getSession().userCredentialManager().updateCredential(
-            context.getRealm(), user, credential
-        );
+
+        // ✅ Keycloak 26+ password update method
+        CredentialHelper.updatePassword(context.getSession(), context.getRealm(), user, password);
+
         context.success();
     }
 
     @Override
-    public void close() {}
+    public void close() {
+        // No cleanup needed
+    }
 }
