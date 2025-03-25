@@ -4,6 +4,9 @@ import org.keycloak.authentication.Authenticator;
 import org.keycloak.authentication.AuthenticatorFactory;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
+import org.keycloak.provider.ProviderConfigProperty;
+
+import java.util.List;
 
 public class CustomResetPasswordAuthenticatorFactory implements AuthenticatorFactory {
 
@@ -21,7 +24,7 @@ public class CustomResetPasswordAuthenticatorFactory implements AuthenticatorFac
 
     @Override
     public String getHelpText() {
-        return "A copy of the default Reset Password authenticator with a custom template.";
+        return "A custom reset password step using a custom FTL template.";
 
     }
 
@@ -37,5 +40,9 @@ public class CustomResetPasswordAuthenticatorFactory implements AuthenticatorFac
     @Override public boolean isUserSetupAllowed() { return false; }
     @Override public Requirement[] getRequirementChoices() {
         return new Requirement[] { Requirement.REQUIRED };
+    }
+
+    @Override public List<ProviderConfigProperty> getConfigProperties() {
+        return null;
     }
 }
