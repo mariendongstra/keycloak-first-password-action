@@ -20,7 +20,7 @@ public class PasswordUpdateEventListenerProviderFactory implements EventListener
 
     @Override
     public void postInit(KeycloakSessionFactory factory) {
-        // Post initialization if needed.
+        // Post-initialization if needed.
     }
 
     @Override

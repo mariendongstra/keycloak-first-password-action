@@ -12,8 +12,8 @@
 
   <!-- Declare modules -->
   <modules>
-    <module>keycloak-extension-a</module>
-    <module>keycloak-extension-b</module>
+    <module>password-update-event-listener</module>
+    <module>custom-password-authenticator</module>
   </modules>
 
   <properties>

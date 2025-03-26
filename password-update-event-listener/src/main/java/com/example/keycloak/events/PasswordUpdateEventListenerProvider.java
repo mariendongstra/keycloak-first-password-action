@@ -20,14 +20,13 @@ public class PasswordUpdateEventListenerProvider implements EventListenerProvide
     public void onEvent(Event event) {
         if (event.getType() == EventType.UPDATE_PASSWORD) {
             String userId = event.getUserId();
-            // Retrieve the current realm using the realm ID from context
-            String realmId = session.getContext().getRealmId();
-            RealmModel realm = session.realms().getRealm(realmId);
+            // Retrieve the current realm from the session context
+            RealmModel realm = session.getContext().getRealm();
             UserModel user = session.users().getUserById(userId, realm);
             if (user != null) {
-                // Example: Set emailVerified to true
+                // Example: Automatically mark the user's email as verified
                 user.setEmailVerified(true);
-                // Example: Set a custom attribute
+                // Also set a custom attribute if needed
                 user.setSingleAttribute("customAttribute", "customValue");
             }
         }
@@ -35,11 +34,11 @@ public class PasswordUpdateEventListenerProvider implements EventListenerProvide
 
     @Override
     public void onEvent(AdminEvent adminEvent, boolean includeRepresentation) {
-        // No admin event processing needed for this provider.
+        // No admin event processing is needed for this provider.
     }
 
     @Override
     public void close() {
-        // Clean up any resources if needed.
+        // Clean up resources if necessary.
     }
 }
