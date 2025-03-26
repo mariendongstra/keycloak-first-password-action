@@ -4,6 +4,7 @@ import org.keycloak.Config.Scope;
 import org.keycloak.events.EventListenerProvider;
 import org.keycloak.events.EventListenerProviderFactory;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.KeycloakSessionFactory;
 
 public class PasswordUpdateEventListenerProviderFactory implements EventListenerProviderFactory {
 
@@ -14,17 +15,17 @@ public class PasswordUpdateEventListenerProviderFactory implements EventListener
 
     @Override
     public void init(Scope config) {
-        // Initialization if needed
+        // Initialization if needed.
     }
 
     @Override
-    public void postInit(KeycloakSession session) {
-        // Post-initialization if needed
+    public void postInit(KeycloakSessionFactory factory) {
+        // Post initialization if needed.
     }
 
     @Override
     public void close() {
-        // Cleanup if necessary
+        // Cleanup if needed.
     }
 
     @Override
