@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        module: [custom-password-authenticator, password-update-event-listener]
+        module: [first-password, custom-password-authenticator, password-update-event-listener]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

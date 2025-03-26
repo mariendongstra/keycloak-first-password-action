@@ -12,6 +12,7 @@
 
   <!-- Declare modules -->
   <modules>
+    <module>first-password-extension</module>
     <module>password-update-event-listener</module>
     <module>custom-password-authenticator</module>
   </modules>
