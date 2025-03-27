@@ -6,7 +6,7 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.provider.ProviderConfigProperty;
 import org.keycloak.Config;
-import org.keycloak.authentication.AuthenticationExecutionModel.Requirement;
+import org.keycloak.models.AuthenticationExecutionModel.Requirement;
 
 import java.util.List;
 
