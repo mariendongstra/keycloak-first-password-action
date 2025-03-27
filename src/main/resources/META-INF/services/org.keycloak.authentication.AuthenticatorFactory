@@ -1,1 +1,1 @@
-com.example.keycloak.FirstPasswordAuthenticatorFactory
+org.example.keycloak.FirstPasswordAuthenticatorFactory
