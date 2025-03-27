@@ -1,27 +1,44 @@
-package com.example.keycloak;
+package org.example.keycloak;
 
-import org.keycloak.authentication.authenticators.resetcred.ResetCredentials;
+import org.keycloak.authentication.AuthenticationFlowContext;
+import org.keycloak.authentication.Authenticator;
 import org.keycloak.models.KeycloakSession;
-import org.keycloak.theme.Theme;
+import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserModel;
 
-import jakarta.ws.rs.core.Response;
+public class FirstPasswordAuthenticator implements Authenticator {
 
-public class FirstPasswordAuthenticator extends ResetCredentials {
-
-    public FirstPasswordAuthenticator(KeycloakSession session) {
-        super(session);
+    @Override
+    public void authenticate(AuthenticationFlowContext context) {
+        context.getSession().getContext().getAuthenticationSession()
+                .setAuthNote("CUSTOM_AUTH", "first-password");
+        context.form().setAttribute("username", context.getUser().getUsername());
+        context.challenge(context.form().createForm("first-password.ftl"));
     }
 
     @Override
-    protected Response setResetCredentialError(String errorMessage) {
-        // Override to use the custom template "first-password.ftl"
-        try {
-            Theme theme = session.theme().getTheme(Theme.Type.LOGIN);
-            return Response.ok(theme.getResourceAsStream("first-password.ftl") != null 
-                ? renderForm("first-password.ftl", errorMessage) 
-                : renderForm("reset-credentials.ftl", errorMessage)).build();
-        } catch (Exception e) {
-            return super.setResetCredentialError(errorMessage);
-        }
+    public void action(AuthenticationFlowContext context) {
+        // Delegate to default reset credentials behavior
+        context.getSession().getProvider(FirstPasswordAuthenticatorProvider.class)
+                .resetPassword(context);
+        context.success();
+    }
+
+    @Override
+    public boolean requiresUser() {
+        return true;
+    }
+
+    @Override
+    public boolean configuredFor(KeycloakSession session, RealmModel realm, UserModel user) {
+        return true;
+    }
+
+    @Override
+    public void setRequiredActions(KeycloakSession session, RealmModel realm, UserModel user) {
+    }
+
+    @Override
+    public void close() {
     }
 }

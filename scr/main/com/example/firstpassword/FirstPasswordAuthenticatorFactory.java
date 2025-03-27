@@ -1,4 +1,4 @@
-package com.example.keycloak;
+package org.example.keycloak;
 
 import org.keycloak.Config;
 import org.keycloak.authentication.Authenticator;
@@ -12,13 +12,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class FirstPasswordAuthenticatorFactory implements AuthenticatorFactory {
-
     public static final String PROVIDER_ID = "first-password-authenticator";
-    private static final FirstPasswordAuthenticator SINGLETON = new FirstPasswordAuthenticator(null);
+    private static final FirstPasswordAuthenticator SINGLETON = new FirstPasswordAuthenticator();
 
     @Override
     public String getId() {
         return PROVIDER_ID;
+    }
+
+    @Override
+    public Authenticator create(KeycloakSession session) {
+        return SINGLETON;
     }
 
     @Override
@@ -38,7 +42,9 @@ public class FirstPasswordAuthenticatorFactory implements AuthenticatorFactory {
 
     @Override
     public AuthenticationExecutionModel.Requirement[] getRequirementChoices() {
-        return REQUIREMENT_CHOICES;
+        return new AuthenticationExecutionModel.Requirement[] {
+            AuthenticationExecutionModel.Requirement.REQUIRED
+        };
     }
 
     @Override
@@ -48,7 +54,7 @@ public class FirstPasswordAuthenticatorFactory implements AuthenticatorFactory {
 
     @Override
     public String getHelpText() {
-        return "Custom authenticator for setting the first password during registration.";
+        return "Forces user to set their initial password with a custom template";
     }
 
     @Override
@@ -57,22 +63,14 @@ public class FirstPasswordAuthenticatorFactory implements AuthenticatorFactory {
     }
 
     @Override
-    public Authenticator create(KeycloakSession session) {
-        return new FirstPasswordAuthenticator(session);
-    }
-
-    @Override
     public void init(Config.Scope config) {
-        // No initialization needed
     }
 
     @Override
     public void postInit(KeycloakSessionFactory factory) {
-        // No post-initialization needed
     }
 
     @Override
     public void close() {
-        // No resources to close
     }
 }
